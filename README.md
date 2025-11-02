@@ -2,6 +2,70 @@
 
 A modular Python-based toolkit for processing and analyzing mass spectrometry data from CSV files. This project provides a collection of standalone scripts that can be executed independently to perform various data processing operations.
 
+---
+
+## 🚀 SETUP RÁPIDO - LEIA ISTO PRIMEIRO!
+
+### ⚠️ IMPORTANTE: Você PRECISA criar o ambiente virtual!
+
+**Este projeto usa bibliotecas Python que precisam ser instaladas. Siga os passos abaixo:**
+
+### Passo 1: Clone ou baixe este repositório
+```bash
+git clone https://github.com/Vinicius-Ikehara/psims-dataprocessing.git
+cd psims-dataprocessing
+```
+
+### Passo 2: Crie o ambiente virtual (venv)
+
+**Windows:**
+```bash
+python -m venv venv
+```
+
+**Linux/Mac:**
+```bash
+python3 -m venv venv
+```
+
+### Passo 3: Ative o ambiente virtual
+
+**Windows:**
+```bash
+venv\Scripts\activate
+```
+
+**Linux/Mac:**
+```bash
+source venv/bin/activate
+```
+
+**✅ Você saberá que o venv está ativo quando ver `(venv)` antes do seu prompt no terminal.**
+
+### Passo 4: Instale as dependências
+```bash
+pip install -r requirements.txt
+```
+
+### Passo 5: Coloque seu arquivo CSV
+- Copie seu arquivo CSV para a pasta `input/`
+- Renomeie para `data.csv` (ou altere o nome em `config.py`)
+
+### Passo 6: Execute o script
+```bash
+python scripts/01_remove_header_lines.py
+```
+
+### 🔴 COMUM ERRO: "ModuleNotFoundError"
+Se você ver este erro, significa que:
+1. Você NÃO criou o ambiente virtual, OU
+2. Você NÃO ativou o ambiente virtual (passo 3), OU
+3. Você NÃO instalou as dependências (passo 4)
+
+**Solução:** Volte ao Passo 2 e siga todos os passos em ordem!
+
+---
+
 ## Features
 
 - **Modular Design**: Each processing step is a separate script that can be run independently
@@ -13,7 +77,7 @@ A modular Python-based toolkit for processing and analyzing mass spectrometry da
 ## Project Structure
 
 ```
-mass-spec-processor/
+psims-dataprocessing/
 ├── input/                  # Place your input CSV files here
 │   └── data.csv           # Your input file (rename your file to this)
 ├── output/                 # Processed files will be saved here
@@ -35,44 +99,53 @@ mass-spec-processor/
 - Python 3.7 or higher
 - pip (Python package installer)
 
-## Quick Start
+## Setup Detalhado
 
-### Option 1: Automated Setup (Recommended)
+### Opção 1: Setup Automático (Recomendado)
 
-**For Windows:**
+**Windows:**
 ```bash
 setup.bat
 ```
 
-**For Linux/Mac:**
+**Linux/Mac:**
 ```bash
 chmod +x setup.sh
 ./setup.sh
 ```
 
-### Option 2: Manual Setup
+### Opção 2: Setup Manual (Passo a Passo)
 
-1. **Clone or download this repository**
+1. **Clone ou baixe este repositório**
 
-2. **Create a virtual environment:**
+2. **Crie o ambiente virtual:**
    ```bash
    # Windows
    python -m venv venv
-   venv\Scripts\activate
 
    # Linux/Mac
    python3 -m venv venv
+   ```
+
+3. **Ative o ambiente virtual:**
+   ```bash
+   # Windows
+   venv\Scripts\activate
+
+   # Linux/Mac
    source venv/bin/activate
    ```
 
-3. **Install dependencies:**
+   **Confirme que está ativo:** Você deve ver `(venv)` no início do prompt.
+
+4. **Instale as dependências:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Place your data file:**
-   - Copy your CSV file to the `input/` directory
-   - Rename it to `data.csv` (or update `config.py` with your filename)
+5. **Coloque seu arquivo de dados:**
+   - Copie seu arquivo CSV para a pasta `input/`
+   - Renomeie para `data.csv` (ou atualize o nome em `config.py`)
 
 ## Usage
 
@@ -198,20 +271,82 @@ See `requirements.txt` for specific versions.
 - Same delimiter as input
 - Cleaned/processed data
 
-## Troubleshooting
+## Troubleshooting (Solução de Problemas)
 
-### Virtual environment not activating
-**Windows:** Make sure you run `venv\Scripts\activate.bat` (not just `activate`)
-**Linux/Mac:** Make sure you use `source venv/bin/activate`
+### ❌ Erro: "ModuleNotFoundError: No module named 'pandas'" (ou numpy, scipy, etc.)
 
-### Python not found
-Make sure Python 3.7+ is installed and added to your PATH. Download from [python.org](https://www.python.org/downloads/)
+**Causa:** Você não instalou as dependências ou não ativou o ambiente virtual.
 
-### Permission denied on setup.sh
-Run: `chmod +x setup.sh` before executing
+**Solução:**
+1. Certifique-se de que o ambiente virtual está ativo (você deve ver `(venv)` no prompt)
+2. Se não estiver ativo, execute:
+   - **Windows:** `venv\Scripts\activate`
+   - **Linux/Mac:** `source venv/bin/activate`
+3. Instale as dependências: `pip install -r requirements.txt`
 
-### Encoding errors
-If you encounter encoding errors, update the `ENCODING` setting in `config.py`
+### ❌ Erro: "python: command not found"
+
+**Causa:** Python não está instalado ou não está no PATH.
+
+**Solução:**
+1. Instale o Python 3.7 ou superior de [python.org](https://www.python.org/downloads/)
+2. **Windows:** Durante a instalação, marque a opção "Add Python to PATH"
+3. **Linux/Mac:** Python geralmente já vem instalado. Tente usar `python3` em vez de `python`
+
+### ❌ Ambiente virtual não ativa
+
+**Windows:**
+- Certifique-se de usar `venv\Scripts\activate` (não apenas `activate`)
+- Se der erro de execução de scripts, execute no PowerShell como administrador:
+  ```powershell
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+  ```
+
+**Linux/Mac:**
+- Use `source venv/bin/activate` (não esqueça do `source`)
+- Se der "permission denied", execute: `chmod +x venv/bin/activate`
+
+### ❌ Erro: "Permission denied" no setup.sh
+
+**Solução:**
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+### ❌ Erro de encoding ao ler arquivo CSV
+
+**Solução:**
+Edite o arquivo `config.py` e altere a variável `ENCODING`:
+```python
+ENCODING = 'utf-8'  # ou 'latin-1', 'cp1252', dependendo do seu arquivo
+```
+
+### ❌ Arquivo de saída não aparece na pasta output/
+
+**Verifique:**
+1. Se o script terminou sem erros
+2. Se o arquivo de entrada está na pasta `input/`
+3. Se o nome do arquivo está correto em `config.py`
+4. Procure por mensagens de erro no terminal
+
+### 💡 Dica: Como saber se o venv está ativo?
+
+Quando o ambiente virtual está ativo, você verá `(venv)` no início da linha do terminal:
+
+**Ativo:**
+```
+(venv) C:\Users\Work\Documents\PROJETOS\Brena>
+```
+
+**Inativo:**
+```
+C:\Users\Work\Documents\PROJETOS\Brena>
+```
+
+### 💡 Preciso ativar o venv toda vez?
+
+**Sim!** Toda vez que você abrir um novo terminal, você precisa ativar o ambiente virtual antes de executar os scripts.
 
 ## Best Practices
 
