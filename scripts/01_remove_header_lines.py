@@ -49,21 +49,35 @@ def remove_header_lines(input_file, output_file):
 
 
 if __name__ == "__main__":
-    # Define output file
+    from config import INPUT_DIR
+    import shutil
+
+    # Define output file (for history/backup)
     output_file = os.path.join(OUTPUT_DIR, "01_header_removed.csv")
+
+    # Input file will be updated with the latest version
+    updated_input = os.path.join(INPUT_DIR, "data.csv")
 
     print("="*70)
     print("SCRIPT 01: REMOVE HEADER LINES")
     print("="*70)
     print(f"Input: {INPUT_FILE}")
-    print(f"Output: {output_file}")
+    print(f"Output (backup): {output_file}")
+    print(f"Updated input: {updated_input}")
     print("\nOperation: Keep only lines 2 and 8 from the first 8 lines")
     print("="*70 + "\n")
 
     try:
+        # Save to OUTPUT for history
         remove_header_lines(INPUT_FILE, output_file)
+
+        # Copy result to INPUT as updated version
+        shutil.copy2(output_file, updated_input)
+        print(f"\n[OK] Updated input file: {updated_input}")
+
         print("\n" + "="*70)
         print("[OK] PROCESSING COMPLETED SUCCESSFULLY!")
+        print("[INFO] Next step: run 02_round_mass.py")
         print("="*70)
 
     except Exception as e:
