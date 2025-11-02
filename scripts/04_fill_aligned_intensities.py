@@ -11,7 +11,8 @@ import numpy as np
 # Add root directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config import INPUT_FILE, OUTPUT_DIR, DELIMITER, ENCODING
+from config import INPUT_FILE, OUTPUT_DIR, ENCODING
+from utils.csv_helper import read_csv_auto, validate_dataframe
 
 
 def fill_aligned_with_intensities(data_file, aligned_file, output_file):
@@ -24,13 +25,18 @@ def fill_aligned_with_intensities(data_file, aligned_file, output_file):
         output_file: Output file with filled intensities (04_aligned_filled.csv)
     """
     print(f"Reading data file: {data_file}")
-    df_data = pd.read_csv(data_file, delimiter=DELIMITER, encoding=ENCODING, low_memory=False)
+    df_data, delimiter_data = read_csv_auto(data_file, ENCODING)
 
     print(f"Reading aligned file: {aligned_file}")
-    df_aligned = pd.read_csv(aligned_file, delimiter=DELIMITER, encoding=ENCODING, low_memory=False)
+    df_aligned, delimiter_aligned = read_csv_auto(aligned_file, 'utf-8')
 
     print(f"[INFO] Data file: {len(df_data)} rows, {len(df_data.columns)} columns")
     print(f"[INFO] Aligned file: {len(df_aligned)} rows, {len(df_aligned.columns)} columns")
+
+    # Validate files
+    validate_dataframe(df_data, min_columns=2, script_name="Script 04 - Data file")
+    validate_dataframe(df_aligned, min_columns=2, script_name="Script 04 - Aligned file")
+
     print(f"\n[INFO] Processing each sample and filling intensities...")
 
     # Process each pair of Mass/Intensity columns
@@ -90,7 +96,7 @@ def fill_aligned_with_intensities(data_file, aligned_file, output_file):
 
     # Save to output
     print(f"[INFO] Saving filled aligned file...")
-    df_aligned.to_csv(output_file, sep=DELIMITER, encoding='utf-8', index=False)
+    df_aligned.to_csv(output_file, sep=delimiter_aligned, encoding='utf-8', index=False)
 
     print(f"\n[OK] Aligned file filled successfully: {output_file}")
     print(f"[OK] Samples processed: {samples_processed}")

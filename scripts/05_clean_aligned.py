@@ -9,7 +9,8 @@ import pandas as pd
 # Add root directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config import OUTPUT_DIR, DELIMITER
+from config import OUTPUT_DIR
+from utils.csv_helper import read_csv_auto, validate_dataframe
 
 
 def clean_aligned(input_file, output_file):
@@ -21,9 +22,12 @@ def clean_aligned(input_file, output_file):
         output_file: Output clean file (05_aligned_clean.csv)
     """
     print(f"Reading aligned file: {input_file}")
-    df = pd.read_csv(input_file, delimiter=DELIMITER, encoding='utf-8', low_memory=False)
+    df, delimiter = read_csv_auto(input_file, 'utf-8')
 
     print(f"[INFO] File loaded: {len(df)} rows, {len(df.columns)} columns")
+
+    # Validate file structure
+    validate_dataframe(df, min_columns=2, script_name="Script 05")
 
     # Calculate row sum for all intensity columns (all columns except 'Aligned')
     print(f"[INFO] Calculating row sums...")
@@ -47,7 +51,7 @@ def clean_aligned(input_file, output_file):
 
     # Save to output file
     print(f"[INFO] Saving cleaned aligned file...")
-    df_clean.to_csv(output_file, sep=DELIMITER, encoding='utf-8', index=False)
+    df_clean.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
 
     print(f"\n[OK] Cleaned aligned file created: {output_file}")
     print(f"[OK] Rows before: {rows_before}")

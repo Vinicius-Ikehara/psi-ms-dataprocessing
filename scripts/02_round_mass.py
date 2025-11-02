@@ -10,7 +10,8 @@ import shutil
 # Add root directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config import INPUT_FILE, INPUT_DIR, OUTPUT_DIR, DELIMITER, ENCODING
+from config import INPUT_FILE, INPUT_DIR, OUTPUT_DIR, ENCODING
+from utils.csv_helper import read_csv_auto, validate_dataframe
 
 
 def round_mass_columns(input_file, output_file, decimal_places):
@@ -24,10 +25,14 @@ def round_mass_columns(input_file, output_file, decimal_places):
     """
     print(f"Reading file: {input_file}")
 
-    # Read CSV file
-    df = pd.read_csv(input_file, delimiter=DELIMITER, encoding=ENCODING, low_memory=False)
+    # Read CSV file with automatic delimiter detection
+    df, delimiter = read_csv_auto(input_file, ENCODING)
 
     print(f"[INFO] File loaded: {len(df)} rows, {len(df.columns)} columns")
+
+    # Validate file structure (should have at least 2 columns: Mass + Intensity)
+    validate_dataframe(df, min_columns=2, script_name="Script 02")
+
     print(f"[INFO] Processing odd-numbered columns (Mass columns)...")
 
     # Process odd-numbered columns (indices 0, 2, 4, 6, ...)
@@ -55,7 +60,7 @@ def round_mass_columns(input_file, output_file, decimal_places):
 
     # Save to output file
     print(f"\n[INFO] Saving processed file...")
-    df.to_csv(output_file, sep=DELIMITER, encoding='utf-8', index=False)
+    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
 
     print(f"\n[OK] Processed file saved at: {output_file}")
     print(f"[OK] Total columns processed: {columns_processed}")

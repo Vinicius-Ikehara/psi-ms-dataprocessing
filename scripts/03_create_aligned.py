@@ -10,7 +10,8 @@ import numpy as np
 # Add root directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config import INPUT_FILE, OUTPUT_DIR, DELIMITER, ENCODING
+from config import INPUT_FILE, OUTPUT_DIR, ENCODING
+from utils.csv_helper import read_csv_auto, validate_dataframe
 
 
 def create_aligned_masses(input_file, output_file):
@@ -24,10 +25,14 @@ def create_aligned_masses(input_file, output_file):
     """
     print(f"Reading file: {input_file}")
 
-    # Read CSV file
-    df = pd.read_csv(input_file, delimiter=DELIMITER, encoding=ENCODING, low_memory=False)
+    # Read CSV file with automatic delimiter detection
+    df, delimiter = read_csv_auto(input_file, ENCODING)
 
     print(f"[INFO] File loaded: {len(df)} rows, {len(df.columns)} columns")
+
+    # Validate file structure
+    validate_dataframe(df, min_columns=2, script_name="Script 03")
+
     print(f"[INFO] Collecting unique mass values from odd-numbered columns...")
 
     # Collect all unique mass values from odd columns (indices 0, 2, 4, 6, ...)
@@ -78,7 +83,7 @@ def create_aligned_masses(input_file, output_file):
 
     # Save to output file
     print(f"[INFO] Saving aligned masses to file...")
-    df_aligned.to_csv(output_file, sep=DELIMITER, encoding='utf-8', index=False)
+    df_aligned.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
 
     print(f"\n[OK] Aligned mass file created: {output_file}")
     print(f"[OK] Total distinct masses: {len(sorted_masses)}")
