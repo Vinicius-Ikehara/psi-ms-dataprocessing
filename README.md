@@ -1,381 +1,340 @@
-# Mass Spectrometry Data Processor
+# Mass Spectrometry Data Processing Pipeline
 
-A modular Python-based toolkit for processing and analyzing mass spectrometry data from CSV files. This project provides a collection of standalone scripts that can be executed independently to perform various data processing operations.
+Automated Python pipeline for processing mass spectrometry data. Transform your raw data into clean, aligned datasets ready for analysis.
 
 ---
 
-## 🚀 SETUP RÁPIDO - LEIA ISTO PRIMEIRO!
+## 🚀 Quick Start (3 Simple Steps!)
 
-### ⚠️ IMPORTANTE: Você PRECISA criar o ambiente virtual!
+### 1️⃣ Install Python
+- Download and install Python 3.7+ from [python.org](https://www.python.org/downloads/)
+- **IMPORTANT:** During installation, check "Add Python to PATH"
 
-**Este projeto usa bibliotecas Python que precisam ser instaladas. Siga os passos abaixo:**
-
-### Passo 1: Clone ou baixe este repositório
+### 2️⃣ Download and Setup the Project
 ```bash
 git clone https://github.com/Vinicius-Ikehara/psims-dataprocessing.git
 cd psims-dataprocessing
-```
-
-### Passo 2: Crie o ambiente virtual (venv)
-
-**Windows:**
-```bash
-python -m venv venv
-```
-
-**Linux/Mac:**
-```bash
-python3 -m venv venv
-```
-
-### Passo 3: Ative o ambiente virtual
-
-**Windows:**
-```bash
-venv\Scripts\activate
-```
-
-**Linux/Mac:**
-```bash
-source venv/bin/activate
-```
-
-**✅ Você saberá que o venv está ativo quando ver `(venv)` antes do seu prompt no terminal.**
-
-### Passo 4: Instale as dependências
-```bash
-pip install -r requirements.txt
-```
-
-### Passo 5: Coloque seu arquivo CSV
-- Copie seu arquivo CSV para a pasta `input/`
-- Renomeie para `data.csv` (ou altere o nome em `config.py`)
-
-### Passo 6: Execute o script
-```bash
-python scripts/01_remove_header_lines.py
-```
-
-### 🔴 COMUM ERRO: "ModuleNotFoundError"
-Se você ver este erro, significa que:
-1. Você NÃO criou o ambiente virtual, OU
-2. Você NÃO ativou o ambiente virtual (passo 3), OU
-3. Você NÃO instalou as dependências (passo 4)
-
-**Solução:** Volte ao Passo 2 e siga todos os passos em ordem!
-
----
-
-## Features
-
-- **Modular Design**: Each processing step is a separate script that can be run independently
-- **Large File Support**: Efficient processing of large CSV files (hundreds of MB)
-- **Easy to Extend**: Add new processing scripts following the established pattern
-- **Cross-Platform**: Works on Windows, macOS, and Linux
-- **Well Documented**: Clear code comments and docstrings
-
-## Project Structure
-
-```
-psims-dataprocessing/
-├── input/                  # Place your input CSV files here
-│   └── data.csv           # Your input file (rename your file to this)
-├── output/                 # Processed files will be saved here
-├── scripts/                # Processing scripts (run these)
-│   └── 01_remove_header_lines.py
-├── utils/                  # Utility functions
-│   ├── __init__.py
-│   └── file_handler.py
-├── config.py              # Configuration settings
-├── requirements.txt       # Python dependencies
-├── setup.sh              # Setup script for Linux/Mac
-├── setup.bat             # Setup script for Windows
-├── .gitignore
-└── README.md
-```
-
-## Prerequisites
-
-- Python 3.7 or higher
-- pip (Python package installer)
-
-## Setup Detalhado
-
-### Opção 1: Setup Automático (Recomendado)
-
-**Windows:**
-```bash
 setup.bat
 ```
 
-**Linux/Mac:**
-```bash
-chmod +x setup.sh
-./setup.sh
+### 3️⃣ Place Your File and Run
+- Place your CSV file in the `input/` folder named `data.csv`
+- Open the `RUN_SCRIPTS/` folder
+- **Double-click** each `.bat` file in order (01, 02, 03...)
+
+**That's it!** 🎉
+
+---
+
+## 📊 Processing Pipeline (6 Steps)
+
+Each step has a `.bat` file in the `RUN_SCRIPTS/` folder - just **double-click** to execute:
+
+```
+📁 input/data.csv (your raw file)
+    ↓
+🔹 run_step_01.bat → Remove unnecessary header lines
+    ↓
+🔹 run_step_02.bat → Round mass values (you choose decimal places)
+    ↓
+🔹 run_step_03.bat → Create aligned list with all unique masses
+    ↓
+🔹 run_step_04.bat → Fill table with intensities
+    ↓
+🔹 run_step_05.bat → Add total sum column
+    ↓
+🔹 run_step_06.bat → Remove rows with no signal (zeros)
+    ↓
+📁 output/06_aligned_clean.csv (FINAL RESULT)
 ```
 
-### Opção 2: Setup Manual (Passo a Passo)
+### Step Descriptions
 
-1. **Clone ou baixe este repositório**
+| Step | Script | What It Does | Output File |
+|------|--------|--------------|-------------|
+| **01** | Remove Header Lines | Removes unnecessary header lines, keeps only sample names and headers | `01_header_removed.csv` |
+| **02** | Round Mass | Rounds all mass columns to N decimal places (you choose) | `02_mass_rounded.csv` |
+| **03** | Create Aligned | Collects all unique masses from all samples, sorts and creates base table | `03_aligned.csv` |
+| **04** | Fill Intensities | Fills the aligned table with corresponding intensities from each sample | `04_aligned_filled.csv` |
+| **05** | Add Total | Adds 'Total' column with sum of intensities across all samples | `05_aligned_with_total.csv` |
+| **06** | Remove Zeros | Removes masses with no signal in any sample (Total = 0) | `06_aligned_clean.csv` ✅ |
 
-2. **Crie o ambiente virtual:**
-   ```bash
-   # Windows
-   python -m venv venv
+---
 
-   # Linux/Mac
-   python3 -m venv venv
-   ```
+## 📂 Project Structure
 
-3. **Ative o ambiente virtual:**
-   ```bash
-   # Windows
-   venv\Scripts\activate
-
-   # Linux/Mac
-   source venv/bin/activate
-   ```
-
-   **Confirme que está ativo:** Você deve ver `(venv)` no início do prompt.
-
-4. **Instale as dependências:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. **Coloque seu arquivo de dados:**
-   - Copie seu arquivo CSV para a pasta `input/`
-   - Renomeie para `data.csv` (ou atualize o nome em `config.py`)
-
-## Usage
-
-### Running Individual Scripts
-
-Each script can be run independently. Make sure your virtual environment is activated first.
-
-**Windows:**
-```bash
-venv\Scripts\activate
-python scripts\01_remove_header_lines.py
+```
+psims-dataprocessing/
+│
+├── input/                          # 📥 Place your data.csv here
+│   └── data.csv
+│
+├── output/                         # 📤 All processed files
+│   ├── 01_header_removed.csv
+│   ├── 02_mass_rounded.csv
+│   ├── 03_aligned.csv
+│   ├── 04_aligned_filled.csv
+│   ├── 05_aligned_with_total.csv
+│   └── 06_aligned_clean.csv      # ⭐ FINAL FILE
+│
+├── RUN_SCRIPTS/                    # 🎯 Double-click here!
+│   ├── run_step_01.bat            # Click to run step 1
+│   ├── run_step_02.bat            # Click to run step 2
+│   ├── run_step_03.bat            # Click to run step 3
+│   ├── run_step_04.bat            # Click to run step 4
+│   ├── run_step_05.bat            # Click to run step 5
+│   └── run_step_06.bat            # Click to run step 6
+│
+├── scripts/                        # Python scripts (executed by .bat files)
+├── utils/                          # Helper functions
+├── config.py                       # Configuration settings
+├── requirements.txt                # Python dependencies
+└── setup.bat                       # Initial setup script
 ```
 
-**Linux/Mac:**
-```bash
-source venv/bin/activate
-python scripts/01_remove_header_lines.py
-```
+---
 
-### Available Scripts
+## ⚙️ How to Use
 
-#### Script 01: Remove Header Lines
-**File:** `01_remove_header_lines.py`
+### First Time (Setup)
 
-**Purpose:** Cleans up the header section of mass spectrometry CSV exports
+1. **Clone or download the project**
+   ```bash
+   git clone https://github.com/Vinicius-Ikehara/psims-dataprocessing.git
+   cd psims-dataprocessing
+   ```
 
-**What it does:**
-- Removes unnecessary header lines (lines 1, 3, 4, 5, 6, 7)
-- Keeps only line 2 (sample names) and line 8 (column headers)
-- Preserves all data rows
+2. **Run the setup** (only need to do this once!)
+   ```bash
+   setup.bat
+   ```
+   This will:
+   - Create Python virtual environment
+   - Install all necessary dependencies
 
-**Output:** `output/01_header_removed.csv`
+### Processing Your Data
+
+1. **Place your file:**
+   - Copy your CSV to `input/data.csv`
+
+2. **Open the `RUN_SCRIPTS/` folder**
+
+3. **Execute steps in order:**
+   - **Double-click** `run_step_01.bat` ➜ wait for completion
+   - **Double-click** `run_step_02.bat` ➜ wait for completion
+   - **Double-click** `run_step_03.bat` ➜ wait for completion
+   - **Double-click** `run_step_04.bat` ➜ wait for completion
+   - **Double-click** `run_step_05.bat` ➜ wait for completion
+   - **Double-click** `run_step_06.bat` ➜ wait for completion
+
+4. **Get your result:**
+   - Final file is in `output/06_aligned_clean.csv`
+
+**That's all! Simple as that!** 🎊
+
+---
+
+## 💡 What Do the .bat Files Do?
+
+Each `.bat` file automatically:
+- ✅ Activates the Python virtual environment
+- ✅ Runs the corresponding Python script
+- ✅ Shows progress on screen
+- ✅ Pauses at the end so you can see results
+
+**You don't need to open terminals, type commands, or activate virtual environments manually!**
+
+---
+
+## 📋 Input File Format
+
+**Your CSV should have:**
+- Mass/Intensity column pairs for each sample
+- Delimiter: `;` (semicolon), `,` (comma), or `tab` (auto-detected)
+- Encoding: UTF-8 (with or without BOM)
 
 **Example:**
-```bash
-python scripts/01_remove_header_lines.py
+```
+Sample1,Sample1,Sample2,Sample2,Sample3,Sample3
+Mass,Intensity,Mass,Intensity,Mass,Intensity
+100.52,1234.56,100.51,2345.67,100.53,3456.78
+101.34,2345.67,101.35,3456.78,101.33,4567.89
+...
 ```
 
-## Configuration
+---
 
-Edit `config.py` to customize:
+## 🔧 Configuration (Optional)
 
-- **Input/Output directories**
-- **Input filename** (default: `data.csv`)
-- **File encoding** (default: `utf-8-sig` to handle BOM)
-- **Delimiter** (default: `;` for semicolon-separated files)
-- **Chunk size** for large file processing
+If you need to customize, edit the `config.py` file:
 
 ```python
-# Example configuration
+# Input file name (if not data.csv)
 INPUT_FILE = os.path.join(INPUT_DIR, "data.csv")
-DELIMITER = ';'
-ENCODING = 'utf-8-sig'
+
+# File encoding (if you have reading issues)
+ENCODING = 'utf-8-sig'  # or 'utf-8', 'latin-1', 'cp1252'
+
+# Delimiter (if you want to force a specific one)
+DELIMITER = ';'  # or ',', '\t', '|'
 ```
 
-## Adding New Scripts
+---
 
-To add a new processing step:
+## 🐛 Common Issues
 
-1. Create a new file: `scripts/02_your_operation.py`
-2. Follow this template:
+### ❌ "Python is not recognized as a command"
 
+**Cause:** Python is not installed or not in PATH
+
+**Solution:**
+1. Install Python from [python.org](https://www.python.org/downloads/)
+2. **Important:** Check "Add Python to PATH" during installation
+3. Restart terminal/computer
+
+### ❌ "ModuleNotFoundError: No module named 'pandas'"
+
+**Cause:** Dependencies were not installed
+
+**Solution:**
+```bash
+setup.bat
+```
+If still not working:
+```bash
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### ❌ Error running setup.bat
+
+**Solution (PowerShell):**
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+Then run `setup.bat` again.
+
+### ❌ File not found
+
+**Check:**
+- ✅ Is your CSV in `input/data.csv`?
+- ✅ Is the name correct?
+- ✅ Did you run previous steps first?
+
+### ❌ Encoding error/strange characters
+
+**Solution:** Edit `config.py` and try different encodings:
 ```python
-"""
-Script 02: Description of what this script does
-"""
-import os
-import sys
-
-# Add root directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from config import INPUT_FILE, OUTPUT_DIR
-
-def your_processing_function(input_file, output_file):
-    """
-    Description of the processing operation
-
-    Args:
-        input_file: Input file path
-        output_file: Output file path
-    """
-    # Your processing logic here
-    pass
-
-if __name__ == "__main__":
-    # For the first script, use INPUT_FILE
-    # For subsequent scripts, use the previous output
-    input_file = os.path.join(OUTPUT_DIR, "01_header_removed.csv")
-    output_file = os.path.join(OUTPUT_DIR, "02_your_output.csv")
-
-    print("="*70)
-    print("SCRIPT 02: YOUR OPERATION NAME")
-    print("="*70)
-
-    try:
-        your_processing_function(input_file, output_file)
-        print("[OK] PROCESSING COMPLETED SUCCESSFULLY!")
-    except Exception as e:
-        print(f"[ERROR] {str(e)}")
-        sys.exit(1)
+ENCODING = 'utf-8'      # Try this first
+ENCODING = 'latin-1'    # Then this
+ENCODING = 'cp1252'     # Last this
 ```
 
-## Dependencies
+---
 
-- **pandas** - Data manipulation and analysis
+## 🎯 Features
+
+- ✅ **Super Easy**: Just two clicks per step
+- ✅ **Automatic**: `.bat` scripts do everything
+- ✅ **Smart Detection**: Delimiter detected automatically
+- ✅ **Large Files**: Processes hundreds of MB efficiently
+- ✅ **Real-Time Feedback**: See progress on screen
+- ✅ **Data Validation**: Checks if files are correct
+- ✅ **Complete History**: All intermediate files are saved
+
+---
+
+## 🔬 Dependencies
+
+The project uses these Python libraries:
+- **pandas** - Data manipulation
 - **numpy** - Numerical computing
 - **scipy** - Scientific computing
-- **matplotlib** - Plotting and visualization
-- **openpyxl** - Excel file support
+- **matplotlib** - Visualization
+- **openpyxl** - Excel support
 
-See `requirements.txt` for specific versions.
+*All installed automatically by `setup.bat`*
 
-## File Format
+---
 
-**Expected Input Format:**
-- CSV file with semicolon (`;`) as delimiter
-- UTF-8 encoding with BOM
-- Mass spectrometry data format (configurable)
+## 📚 For Advanced Users
 
-**Output Format:**
-- UTF-8 encoding
-- Same delimiter as input
-- Cleaned/processed data
+### Run via Command Line
 
-## Troubleshooting (Solução de Problemas)
+If you prefer using the terminal:
 
-### ❌ Erro: "ModuleNotFoundError: No module named 'pandas'" (ou numpy, scipy, etc.)
-
-**Causa:** Você não instalou as dependências ou não ativou o ambiente virtual.
-
-**Solução:**
-1. Certifique-se de que o ambiente virtual está ativo (você deve ver `(venv)` no prompt)
-2. Se não estiver ativo, execute:
-   - **Windows:** `venv\Scripts\activate`
-   - **Linux/Mac:** `source venv/bin/activate`
-3. Instale as dependências: `pip install -r requirements.txt`
-
-### ❌ Erro: "python: command not found"
-
-**Causa:** Python não está instalado ou não está no PATH.
-
-**Solução:**
-1. Instale o Python 3.7 ou superior de [python.org](https://www.python.org/downloads/)
-2. **Windows:** Durante a instalação, marque a opção "Add Python to PATH"
-3. **Linux/Mac:** Python geralmente já vem instalado. Tente usar `python3` em vez de `python`
-
-### ❌ Ambiente virtual não ativa
-
-**Windows:**
-- Certifique-se de usar `venv\Scripts\activate` (não apenas `activate`)
-- Se der erro de execução de scripts, execute no PowerShell como administrador:
-  ```powershell
-  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-  ```
-
-**Linux/Mac:**
-- Use `source venv/bin/activate` (não esqueça do `source`)
-- Se der "permission denied", execute: `chmod +x venv/bin/activate`
-
-### ❌ Erro: "Permission denied" no setup.sh
-
-**Solução:**
 ```bash
+# Activate virtual environment
+venv\Scripts\activate
+
+# Run scripts
+python scripts\01_remove_header_lines.py
+python scripts\02_round_mass.py
+python scripts\03_create_aligned.py
+python scripts\04_fill_aligned_intensities.py
+python scripts\05_clean_aligned.py
+python scripts\06_remove_zero_rows.py
+```
+
+### Linux/Mac
+
+```bash
+# Initial setup
 chmod +x setup.sh
 ./setup.sh
+
+# Activate environment
+source venv/bin/activate
+
+# Run scripts
+python scripts/01_remove_header_lines.py
+# ... etc
 ```
 
-### ❌ Erro de encoding ao ler arquivo CSV
+### Adding New Steps
 
-**Solução:**
-Edite o arquivo `config.py` e altere a variável `ENCODING`:
-```python
-ENCODING = 'utf-8'  # ou 'latin-1', 'cp1252', dependendo do seu arquivo
-```
+1. Create a new script in `scripts/07_your_operation.py`
+2. Create a `.bat` file in `RUN_SCRIPTS/run_step_07.bat`
+3. Follow the template from existing scripts
 
-### ❌ Arquivo de saída não aparece na pasta output/
+---
 
-**Verifique:**
-1. Se o script terminou sem erros
-2. Se o arquivo de entrada está na pasta `input/`
-3. Se o nome do arquivo está correto em `config.py`
-4. Procure por mensagens de erro no terminal
+## 🤝 Contributing
 
-### 💡 Dica: Como saber se o venv está ativo?
+Contributions are welcome!
 
-Quando o ambiente virtual está ativo, você verá `(venv)` no início da linha do terminal:
-
-**Ativo:**
-```
-(venv) C:\Users\Work\Documents\PROJETOS\Brena>
-```
-
-**Inativo:**
-```
-C:\Users\Work\Documents\PROJETOS\Brena>
-```
-
-### 💡 Preciso ativar o venv toda vez?
-
-**Sim!** Toda vez que você abrir um novo terminal, você precisa ativar o ambiente virtual antes de executar os scripts.
-
-## Best Practices
-
-1. **Keep original files safe**: Always work with copies of your data
-2. **Run scripts in sequence**: Script 02 uses output from Script 01, etc.
-3. **Check output files**: Verify each processing step before moving to the next
-4. **Use virtual environment**: Always activate the venv before running scripts
-
-## Contributing
-
-To contribute:
 1. Fork the repository
-2. Create a new branch for your feature
-3. Add your processing script following the template
-4. Test thoroughly with sample data
-5. Submit a pull request
+2. Create a branch (`git checkout -b feature/new-step`)
+3. Make your changes
+4. Test thoroughly
+5. Open a Pull Request
 
-## License
+---
+
+## 📄 License
 
 [Add your license here]
 
-## Authors
+---
+
+## 👥 Authors
 
 [Add authors here]
 
-## Acknowledgments
+---
 
-This toolkit was developed for processing mass spectrometry data exports and making data analysis workflows more efficient and reproducible.
+## 🙏 Acknowledgments
 
-## Support
+This pipeline was developed to make mass spectrometry data processing more efficient, reproducible, and accessible for researchers.
 
-For issues, questions, or suggestions, please [open an issue](link-to-issues) or contact [contact info].
+---
+
+## 📞 Support
+
+- 🐛 Report bug: [GitHub Issues]
+- 💬 Questions: [Contact]
+- 📖 Documentation: This README
+
+---
+
+**Developed with ❤️ to facilitate your mass spectrometry research**

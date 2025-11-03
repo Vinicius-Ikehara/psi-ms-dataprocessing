@@ -72,14 +72,15 @@ def create_aligned_masses(input_file, output_file):
     # Create DataFrame with Aligned column + empty columns for each sample
     print(f"[INFO] Creating aligned DataFrame with sample headers...")
 
-    # Start with Aligned column
-    data_dict = {'Aligned': sorted_masses}
+    # Create DataFrame with only Aligned column first (more memory efficient)
+    df_aligned = pd.DataFrame({'Aligned': sorted_masses})
 
-    # Add empty columns for each sample (will be filled in later steps)
-    for sample_name in sample_headers:
-        data_dict[sample_name] = [np.nan] * len(sorted_masses)
-
-    df_aligned = pd.DataFrame(data_dict)
+    # Add empty columns for each sample using pandas (much more efficient than lists)
+    print(f"[INFO] Adding {len(sample_headers)} sample columns...")
+    for i, sample_name in enumerate(sample_headers):
+        df_aligned[sample_name] = np.nan
+        if (i + 1) % 20 == 0:  # Progress update every 20 columns
+            print(f"[INFO] Added {i + 1}/{len(sample_headers)} columns...")
 
     # Save to output file
     print(f"[INFO] Saving aligned masses to file...")

@@ -1,7 +1,7 @@
 @echo off
 cd ..
 echo ========================================
-echo  Executing Step 05: Add Total Sum Column
+echo  Executing Step 11: Remove QC Noise
 echo ========================================
 echo.
 
@@ -9,7 +9,7 @@ REM Activate virtual environment
 call venv\Scripts\activate.bat
 
 REM Run the script
-python scripts\05_clean_aligned.py
+python scripts\11_remove_qc_noise.py
 
 echo.
 echo ========================================
