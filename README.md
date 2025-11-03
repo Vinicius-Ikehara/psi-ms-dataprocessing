@@ -1,63 +1,79 @@
 # Mass Spectrometry Data Processing Pipeline
 
-Automated Python pipeline for processing mass spectrometry data. Transform your raw data into clean, aligned datasets ready for analysis.
+Automated Python pipeline for processing mass spectrometry data. Transform your raw data into clean, aligned, and quality-controlled datasets ready for analysis.
 
 ---
 
 ## 🚀 Quick Start (3 Simple Steps!)
 
-### 1️⃣ Install Python
-- Download and install Python 3.7+ from [python.org](https://www.python.org/downloads/)
-- **IMPORTANT:** During installation, check "Add Python to PATH"
+### Step 1: Install Python
+1. Download Python 3.7+ from [python.org](https://www.python.org/downloads/)
+2. **IMPORTANT:** During installation, check **"Add Python to PATH"**
+3. Complete the installation
 
-### 2️⃣ Download and Setup the Project
-```bash
-git clone https://github.com/Vinicius-Ikehara/psims-dataprocessing.git
-cd psims-dataprocessing
-setup.bat
-```
+### Step 2: Download and Setup
+1. Download this project and save it to a folder on your computer
+2. Open the project folder
+3. **Double-click** `setup.bat` (this installs everything automatically)
+4. Wait for setup to complete
 
-### 3️⃣ Place Your File and Run
-- Place your CSV file in the `input/` folder named `data.csv`
-- Open the `RUN_SCRIPTS/` folder
-- **Double-click** each `.bat` file in order (01, 02, 03...)
+### Step 3: Process Your Data
+1. Place your CSV file in the `input/` folder and name it `data.csv`
+2. Open the `RUN_SCRIPTS/` folder
+3. **Double-click** each `.bat` file in order: `run_step_01.bat`, `run_step_02.bat`, etc.
+4. Wait for each step to finish before moving to the next
 
-**That's it!** 🎉
+**That's it!** Your processed data will be in the `output/` folder.
 
 ---
 
-## 📊 Processing Pipeline (6 Steps)
+## 📊 Complete Processing Pipeline (11 Steps)
 
-Each step has a `.bat` file in the `RUN_SCRIPTS/` folder - just **double-click** to execute:
+Each step has a `.bat` file - just **double-click** to run:
 
 ```
-📁 input/data.csv (your raw file)
+📁 input/data.csv (your raw data)
     ↓
-🔹 run_step_01.bat → Remove unnecessary header lines
+Step 01 → Remove header lines
     ↓
-🔹 run_step_02.bat → Round mass values (you choose decimal places)
+Step 02 → Round mass values (you choose precision)
     ↓
-🔹 run_step_03.bat → Create aligned list with all unique masses
+Step 03 → Create aligned mass list
     ↓
-🔹 run_step_04.bat → Fill table with intensities
+Step 04 → Fill with intensities
     ↓
-🔹 run_step_05.bat → Add total sum column
+Step 05 → Add total sum column
     ↓
-🔹 run_step_06.bat → Remove rows with no signal (zeros)
+Step 06 → Remove zero rows
     ↓
-📁 output/06_aligned_clean.csv (FINAL RESULT)
+Step 07 → Calculate BFF (you choose threshold)
+    ↓
+Step 08 → Subtract BFF (background correction)
+    ↓
+Step 09 → Convert negatives to zero
+    ↓
+Step 10 → Add QC/RCP totals
+    ↓
+Step 11 → Remove QC/RCP noise (quality filtering)
+    ↓
+📁 output/11_aligned_qc_filtered.csv ✅ FINAL RESULT
 ```
 
-### Step Descriptions
+### Detailed Step Descriptions
 
-| Step | Script | What It Does | Output File |
-|------|--------|--------------|-------------|
-| **01** | Remove Header Lines | Removes unnecessary header lines, keeps only sample names and headers | `01_header_removed.csv` |
-| **02** | Round Mass | Rounds all mass columns to N decimal places (you choose) | `02_mass_rounded.csv` |
-| **03** | Create Aligned | Collects all unique masses from all samples, sorts and creates base table | `03_aligned.csv` |
-| **04** | Fill Intensities | Fills the aligned table with corresponding intensities from each sample | `04_aligned_filled.csv` |
-| **05** | Add Total | Adds 'Total' column with sum of intensities across all samples | `05_aligned_with_total.csv` |
-| **06** | Remove Zeros | Removes masses with no signal in any sample (Total = 0) | `06_aligned_clean.csv` ✅ |
+| Step | What It Does | Output File |
+|------|--------------|-------------|
+| **01** | Removes unnecessary header lines, keeps sample names and column headers | `01_header_removed.csv` |
+| **02** | Rounds all mass columns to N decimal places (you choose: 2, 3, 4, etc.) | `02_mass_rounded.csv` |
+| **03** | Collects all unique masses from all samples and creates sorted aligned table | `03_aligned.csv` |
+| **04** | Fills the aligned table with intensity values from each sample | `04_aligned_filled.csv` |
+| **05** | Adds 'Total' column with sum of all intensities per mass | `05_aligned_with_total.csv` |
+| **06** | Removes masses with no signal in any sample (Total = 0) | `06_aligned_clean.csv` |
+| **07** | Calculates BFF (Background Filter Factor) from Blank columns (you choose threshold: 3, 10, etc.) | `07_aligned_with_bff.csv` |
+| **08** | Subtracts BFF from all sample columns (background correction) | `08_aligned_bff_subtracted.csv` |
+| **09** | Converts all negative values to zero (below-background signals) | `09_aligned_final.csv` |
+| **10** | Calculates QC_RCP_Total and Samples_Total for quality control | `10_aligned_with_qc_totals.csv` |
+| **11** | Removes noise: rows where QC/RCP = 0 or Samples = 0 | `11_aligned_qc_filtered.csv` ✅ |
 
 ---
 
@@ -66,217 +82,215 @@ Each step has a `.bat` file in the `RUN_SCRIPTS/` folder - just **double-click**
 ```
 psims-dataprocessing/
 │
-├── input/                          # 📥 Place your data.csv here
+├── input/                          # Place your data.csv here
 │   └── data.csv
 │
-├── output/                         # 📤 All processed files
+├── output/                         # All processed files appear here
 │   ├── 01_header_removed.csv
 │   ├── 02_mass_rounded.csv
 │   ├── 03_aligned.csv
 │   ├── 04_aligned_filled.csv
 │   ├── 05_aligned_with_total.csv
-│   └── 06_aligned_clean.csv      # ⭐ FINAL FILE
+│   ├── 06_aligned_clean.csv
+│   ├── 07_aligned_with_bff.csv
+│   ├── 08_aligned_bff_subtracted.csv
+│   ├── 09_aligned_final.csv
+│   ├── 10_aligned_with_qc_totals.csv
+│   └── 11_aligned_qc_filtered.csv  # ⭐ FINAL FILE
 │
-├── RUN_SCRIPTS/                    # 🎯 Double-click here!
-│   ├── run_step_01.bat            # Click to run step 1
-│   ├── run_step_02.bat            # Click to run step 2
-│   ├── run_step_03.bat            # Click to run step 3
-│   ├── run_step_04.bat            # Click to run step 4
-│   ├── run_step_05.bat            # Click to run step 5
-│   └── run_step_06.bat            # Click to run step 6
+├── RUN_SCRIPTS/                    # Double-click these!
+│   ├── run_step_01.bat
+│   ├── run_step_02.bat
+│   ├── run_step_03.bat
+│   ├── run_step_04.bat
+│   ├── run_step_05.bat
+│   ├── run_step_06.bat
+│   ├── run_step_07.bat
+│   ├── run_step_08.bat
+│   ├── run_step_09.bat
+│   ├── run_step_10.bat
+│   └── run_step_11.bat
 │
-├── scripts/                        # Python scripts (executed by .bat files)
+├── scripts/                        # Python scripts (run by .bat files)
 ├── utils/                          # Helper functions
-├── config.py                       # Configuration settings
+├── config.py                       # Configuration
 ├── requirements.txt                # Python dependencies
-└── setup.bat                       # Initial setup script
+└── setup.bat                       # Setup script (run once)
 ```
 
 ---
 
-## ⚙️ How to Use
-
-### First Time (Setup)
-
-1. **Clone or download the project**
-   ```bash
-   git clone https://github.com/Vinicius-Ikehara/psims-dataprocessing.git
-   cd psims-dataprocessing
-   ```
-
-2. **Run the setup** (only need to do this once!)
-   ```bash
-   setup.bat
-   ```
-   This will:
-   - Create Python virtual environment
-   - Install all necessary dependencies
-
-### Processing Your Data
-
-1. **Place your file:**
-   - Copy your CSV to `input/data.csv`
-
-2. **Open the `RUN_SCRIPTS/` folder**
-
-3. **Execute steps in order:**
-   - **Double-click** `run_step_01.bat` ➜ wait for completion
-   - **Double-click** `run_step_02.bat` ➜ wait for completion
-   - **Double-click** `run_step_03.bat` ➜ wait for completion
-   - **Double-click** `run_step_04.bat` ➜ wait for completion
-   - **Double-click** `run_step_05.bat` ➜ wait for completion
-   - **Double-click** `run_step_06.bat` ➜ wait for completion
-
-4. **Get your result:**
-   - Final file is in `output/06_aligned_clean.csv`
-
-**That's all! Simple as that!** 🎊
-
----
-
-## 💡 What Do the .bat Files Do?
+## 💡 What the .bat Files Do
 
 Each `.bat` file automatically:
 - ✅ Activates the Python virtual environment
 - ✅ Runs the corresponding Python script
-- ✅ Shows progress on screen
-- ✅ Pauses at the end so you can see results
+- ✅ Shows progress and results
+- ✅ Pauses so you can read the output
 
-**You don't need to open terminals, type commands, or activate virtual environments manually!**
+**You don't need to type commands or use the terminal!**
 
 ---
 
-## 📋 Input File Format
+## 📋 Input File Requirements
 
-**Your CSV should have:**
-- Mass/Intensity column pairs for each sample
-- Delimiter: `;` (semicolon), `,` (comma), or `tab` (auto-detected)
-- Encoding: UTF-8 (with or without BOM)
+Your CSV file should have:
+- **Format:** Mass/Intensity column pairs for each sample
+- **Delimiter:** Semicolon (`;`), comma (`,`), or tab (auto-detected)
+- **Encoding:** UTF-8 (with or without BOM)
 
 **Example:**
 ```
-Sample1,Sample1,Sample2,Sample2,Sample3,Sample3
-Mass,Intensity,Mass,Intensity,Mass,Intensity
-100.52,1234.56,100.51,2345.67,100.53,3456.78
-101.34,2345.67,101.35,3456.78,101.33,4567.89
+Sample1,Sample1,Sample2,Sample2,Blank1,Blank1,QC1,QC1
+Mass,Intensity,Mass,Intensity,Mass,Intensity,Mass,Intensity
+100.52,1234.56,100.51,2345.67,100.50,123.45,100.52,2000.00
+101.34,2345.67,101.35,3456.78,101.33,234.56,101.34,3000.00
 ...
 ```
+
+**Important columns:**
+- **Blank columns:** Used for BFF calculation (Step 07)
+- **QC/RCP columns:** Used for quality control filtering (Steps 10-11)
+
+---
+
+## 🎯 Key Features
+
+### Background Correction (Steps 07-09)
+The pipeline calculates and subtracts background noise using Blank samples:
+- **Step 07:** Calculates BFF = mean + (threshold × std_dev) from Blank columns
+- **Step 08:** Subtracts BFF from all samples
+- **Step 09:** Converts negative values (below background) to zero
+
+### Quality Control Filtering (Steps 10-11)
+Removes contamination and noise using QC/RCP controls:
+- **Step 10:** Sums QC/RCP columns and sample columns separately
+- **Step 11:** Removes rows where:
+  - QC_RCP_Total = 0 (not in controls = contamination)
+  - OR Samples_Total = 0 (not in samples = irrelevant)
 
 ---
 
 ## 🔧 Configuration (Optional)
 
-If you need to customize, edit the `config.py` file:
+If needed, edit `config.py` to customize:
 
 ```python
-# Input file name (if not data.csv)
+# Input file name (default: data.csv)
 INPUT_FILE = os.path.join(INPUT_DIR, "data.csv")
 
-# File encoding (if you have reading issues)
+# File encoding (default: utf-8-sig)
 ENCODING = 'utf-8-sig'  # or 'utf-8', 'latin-1', 'cp1252'
 
-# Delimiter (if you want to force a specific one)
+# Delimiter (default: auto-detected)
 DELIMITER = ';'  # or ',', '\t', '|'
 ```
 
 ---
 
-## 🐛 Common Issues
+## 🐛 Troubleshooting
 
-### ❌ "Python is not recognized as a command"
-
-**Cause:** Python is not installed or not in PATH
-
+### "Python is not recognized as a command"
+**Problem:** Python not installed or not in PATH
 **Solution:**
 1. Install Python from [python.org](https://www.python.org/downloads/)
-2. **Important:** Check "Add Python to PATH" during installation
-3. Restart terminal/computer
+2. **During installation, CHECK "Add Python to PATH"**
+3. Restart your computer
+4. Run `setup.bat` again
 
-### ❌ "ModuleNotFoundError: No module named 'pandas'"
-
-**Cause:** Dependencies were not installed
-
+### "ModuleNotFoundError: No module named 'pandas'"
+**Problem:** Dependencies not installed
 **Solution:**
-```bash
-setup.bat
-```
-If still not working:
-```bash
-venv\Scripts\activate
-pip install -r requirements.txt
-```
+1. Double-click `setup.bat` again
+2. Wait for it to complete
+3. If still failing, open Command Prompt and run:
+   ```
+   cd path\to\project
+   venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-### ❌ Error running setup.bat
+### setup.bat won't run
+**Problem:** PowerShell execution policy
+**Solution:**
+1. Open PowerShell as Administrator
+2. Run: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+3. Run `setup.bat` again
 
-**Solution (PowerShell):**
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-Then run `setup.bat` again.
-
-### ❌ File not found
-
+### File not found errors
 **Check:**
-- ✅ Is your CSV in `input/data.csv`?
-- ✅ Is the name correct?
-- ✅ Did you run previous steps first?
+- Is your CSV file in `input/` folder?
+- Is it named `data.csv`?
+- Did you run the previous steps first?
 
-### ❌ Encoding error/strange characters
-
+### Encoding errors / strange characters
 **Solution:** Edit `config.py` and try different encodings:
 ```python
-ENCODING = 'utf-8'      # Try this first
-ENCODING = 'latin-1'    # Then this
-ENCODING = 'cp1252'     # Last this
+ENCODING = 'utf-8'      # Try first
+ENCODING = 'latin-1'    # Try second
+ENCODING = 'cp1252'     # Try third
 ```
+
+### No columns with "Blank" found (Step 07)
+**Problem:** Your data doesn't have Blank samples
+**Impact:** BFF will be zero for all rows (no background correction)
+**Note:** This is OK if you don't have blank samples, but background correction won't be applied
+
+### No columns with "QC" or "RCP" found (Step 10)
+**Problem:** Your data doesn't have QC/RCP samples
+**Impact:** Step 11 will remove rows where Samples_Total = 0 only
+**Note:** You should have at least QC columns for proper quality control
 
 ---
 
-## 🎯 Features
+## 📊 Understanding the Output
 
-- ✅ **Super Easy**: Just two clicks per step
-- ✅ **Automatic**: `.bat` scripts do everything
-- ✅ **Smart Detection**: Delimiter detected automatically
-- ✅ **Large Files**: Processes hundreds of MB efficiently
-- ✅ **Real-Time Feedback**: See progress on screen
-- ✅ **Data Validation**: Checks if files are correct
-- ✅ **Complete History**: All intermediate files are saved
+### After Step 06: Basic Processing Complete
+- Data is aligned across all samples
+- Zero-signal masses removed
+- Ready for background correction
+
+### After Step 09: Background Correction Complete
+- Background noise (BFF) calculated and subtracted
+- Negative values (below background) converted to zero
+- Ready for quality control
+
+### After Step 11: Final Dataset (RECOMMENDED)
+- Quality control filtering applied
+- Contamination removed (signals not in QC/RCP)
+- Irrelevant data removed (zero signals)
+- **This is your final, validated dataset**
 
 ---
 
 ## 🔬 Dependencies
 
-The project uses these Python libraries:
+Automatically installed by `setup.bat`:
 - **pandas** - Data manipulation
 - **numpy** - Numerical computing
 - **scipy** - Scientific computing
 - **matplotlib** - Visualization
 - **openpyxl** - Excel support
 
-*All installed automatically by `setup.bat`*
-
 ---
 
 ## 📚 For Advanced Users
 
-### Run via Command Line
+### Running via Command Line
 
 If you prefer using the terminal:
 
 ```bash
-# Activate virtual environment
+# Activate environment
 venv\Scripts\activate
 
-# Run scripts
+# Run scripts manually
 python scripts\01_remove_header_lines.py
 python scripts\02_round_mass.py
-python scripts\03_create_aligned.py
-python scripts\04_fill_aligned_intensities.py
-python scripts\05_clean_aligned.py
-python scripts\06_remove_zero_rows.py
+# ... etc
 ```
 
-### Linux/Mac
+### Linux/Mac Support
 
 ```bash
 # Initial setup
@@ -291,23 +305,23 @@ python scripts/01_remove_header_lines.py
 # ... etc
 ```
 
-### Adding New Steps
+### Adding Custom Steps
 
-1. Create a new script in `scripts/07_your_operation.py`
-2. Create a `.bat` file in `RUN_SCRIPTS/run_step_07.bat`
+1. Create new script: `scripts/12_your_operation.py`
+2. Create batch file: `RUN_SCRIPTS/run_step_12.bat`
 3. Follow the template from existing scripts
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome!
+Contributions welcome!
 
 1. Fork the repository
 2. Create a branch (`git checkout -b feature/new-step`)
 3. Make your changes
 4. Test thoroughly
-5. Open a Pull Request
+5. Submit a pull request
 
 ---
 
@@ -325,16 +339,23 @@ Contributions are welcome!
 
 ## 🙏 Acknowledgments
 
-This pipeline was developed to make mass spectrometry data processing more efficient, reproducible, and accessible for researchers.
+This pipeline was developed to make mass spectrometry data processing more efficient, reproducible, and accessible for researchers. It provides a complete workflow from raw data export to quality-controlled, analysis-ready datasets.
 
 ---
 
 ## 📞 Support
 
-- 🐛 Report bug: [GitHub Issues]
-- 💬 Questions: [Contact]
+- 🐛 Report issues: [GitHub Issues](https://github.com/Vinicius-Ikehara/psims-dataprocessing/issues)
+- 💬 Questions: Open an issue with the "question" label
 - 📖 Documentation: This README
 
 ---
 
-**Developed with ❤️ to facilitate your mass spectrometry research**
+## 🔄 Version History
+
+- **v2.0** - Extended to 11-step pipeline with background correction and QC filtering
+- **v1.0** - Initial release with 6-step basic processing
+
+---
+
+**Developed with ❤️ to facilitate mass spectrometry research**
