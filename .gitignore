@@ -41,7 +41,9 @@ Thumbs.db
 
 # Project specific
 input/*.csv
+input/**/*.csv
 output/*.csv
+output/**/*.csv
 *.log
 
 # Keep directory structure

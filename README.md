@@ -27,7 +27,7 @@ Automated Python pipeline for processing mass spectrometry data. Transform your 
 
 ---
 
-## 📊 Complete Processing Pipeline (11 Steps)
+## 📊 Complete Processing Pipeline (11 Steps + 1 Optional)
 
 Each step has a `.bat` file - just **double-click** to run:
 
@@ -41,6 +41,8 @@ Step 02 → Round mass values (you choose precision)
 Step 03 → Create aligned mass list
     ↓
 Step 04 → Fill with intensities
+    ↓
+[OPTIONAL] → Apply noise threshold (removes low signals)
     ↓
 Step 05 → Add total sum column
     ↓
@@ -67,6 +69,7 @@ Step 11 → Remove QC/RCP noise (quality filtering)
 | **02** | Rounds all mass columns to N decimal places (you choose: 2, 3, 4, etc.) | `02_mass_rounded.csv` |
 | **03** | Collects all unique masses from all samples and creates sorted aligned table | `03_aligned.csv` |
 | **04** | Fills the aligned table with intensity values from each sample | `04_aligned_filled.csv` |
+| **OPTIONAL** | **Noise Threshold:** Sets all values ≤ threshold to 0 (overwrites file 04) | `04_aligned_filled.csv` |
 | **05** | Adds 'Total' column with sum of all intensities per mass | `05_aligned_with_total.csv` |
 | **06** | Removes masses with no signal in any sample (Total = 0) | `06_aligned_clean.csv` |
 | **07** | Calculates BFF (Background Filter Factor) from Blank columns (you choose threshold: 3, 10, etc.) | `07_aligned_with_bff.csv` |
@@ -103,6 +106,7 @@ psims-dataprocessing/
 │   ├── run_step_02.bat
 │   ├── run_step_03.bat
 │   ├── run_step_04.bat
+│   ├── run_noise_threshold.bat     # ⚠️ OPTIONAL (between 04-05)
 │   ├── run_step_05.bat
 │   ├── run_step_06.bat
 │   ├── run_step_07.bat
@@ -155,6 +159,14 @@ Mass,Intensity,Mass,Intensity,Mass,Intensity,Mass,Intensity
 ---
 
 ## 🎯 Key Features
+
+### Optional Noise Threshold (Between Steps 04-05)
+An optional intermediate step to remove low-intensity noise:
+- **When to use:** If you want to filter out weak signals before further processing
+- **How it works:** All values ≤ your specified threshold are set to 0
+- **Important:** This step **OVERWRITES** the file `04_aligned_filled.csv`
+- **Performance:** Uses vectorized pandas operations for fast processing on large datasets
+- **Usage:** Run `run_noise_threshold.bat` after Step 04 and before Step 05
 
 ### Background Correction (Steps 07-09)
 The pipeline calculates and subtracts background noise using Blank samples:

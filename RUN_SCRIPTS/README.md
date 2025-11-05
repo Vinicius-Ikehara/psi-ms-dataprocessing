@@ -48,15 +48,70 @@ Double-click this file to:
 - Save result to `output/04_aligned_filled.csv`
 - **Note:** This step requires Step 03 to be completed first
 
-### Step 05: Clean Aligned (Remove Zero Rows)
+### OPTIONAL: Apply Noise Threshold
+**File:** `run_noise_threshold.bat`
+
+⚠️ **OPTIONAL STEP - Run between Step 04 and Step 05** ⚠️
+
+Double-click this file to:
+- Read `output/04_aligned_filled.csv`
+- Ask for a noise threshold level (e.g., 100, 500, 1000)
+- Set all values <= threshold to 0 (removes low-intensity noise)
+- **OVERWRITES** `output/04_aligned_filled.csv` with filtered data
+- **Note:** Only run if you want to apply noise filtering!
+
+### Step 05: Add Total Sum Column
 **File:** `run_step_05.bat`
 
 Double-click this file to:
 - Read `output/04_aligned_filled.csv`
-- Remove rows where all intensities are zero (masses with no signal)
-- Save result to `output/05_aligned_clean.csv`
-- **This is your final clean dataset ready for analysis!**
+- Add 'Total' column with sum of all intensities per mass
+- Save result to `output/05_aligned_with_total.csv`
 - **Note:** This step requires Step 04 to be completed first
+
+### Step 06: Remove Zero Rows
+**File:** `run_step_06.bat`
+
+Double-click this file to:
+- Remove masses with no signal in any sample (Total = 0)
+- Save result to `output/06_aligned_clean.csv`
+
+### Step 07: Calculate BFF
+**File:** `run_step_07.bat`
+
+Double-click this file to:
+- Calculate BFF (Background Filter Factor) from Blank columns
+- You will be asked for threshold multiplier (e.g., 3, 10)
+- Save result to `output/07_aligned_with_bff.csv`
+
+### Step 08: Subtract BFF
+**File:** `run_step_08.bat`
+
+Double-click this file to:
+- Subtract BFF from all sample columns (background correction)
+- Save result to `output/08_aligned_bff_subtracted.csv`
+
+### Step 09: Convert Negatives to Zero
+**File:** `run_step_09.bat`
+
+Double-click this file to:
+- Convert all negative values to zero (below-background signals)
+- Save result to `output/09_aligned_final.csv`
+
+### Step 10: Add QC/RCP Totals
+**File:** `run_step_10.bat`
+
+Double-click this file to:
+- Calculate QC_RCP_Total and Samples_Total for quality control
+- Save result to `output/10_aligned_with_qc_totals.csv`
+
+### Step 11: Remove QC/RCP Noise
+**File:** `run_step_11.bat`
+
+Double-click this file to:
+- Remove rows where QC_RCP_Total = 0 or Samples_Total = 0
+- Save result to `output/11_aligned_qc_filtered.csv`
+- **This is your final QC-validated dataset!**
 
 ## Troubleshooting
 
