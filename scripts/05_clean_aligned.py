@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import OUTPUT_DIR
 from utils.csv_helper import read_csv_auto, validate_dataframe
+from utils import get_decimal_places
 
 
 def add_total_column(input_file, output_file):
@@ -39,9 +40,14 @@ def add_total_column(input_file, output_file):
     zero_rows = len(df[df['Total'] == 0])
     non_zero_rows = len(df[df['Total'] > 0])
 
+    # Get decimal places from config (saved in script 02)
+    decimal_places = get_decimal_places(OUTPUT_DIR)
+
     # Save to output file
     print(f"[INFO] Saving file with total column...")
-    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
+    # Use float_format to preserve the exact number of decimal places
+    float_format = f'%.{decimal_places}f'
+    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False, float_format=float_format)
 
     print(f"\n[OK] File with total column created: {output_file}")
     print(f"[OK] Total rows: {len(df)}")

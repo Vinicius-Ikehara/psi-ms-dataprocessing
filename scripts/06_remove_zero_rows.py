@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import OUTPUT_DIR
 from utils.csv_helper import read_csv_auto, validate_dataframe
+from utils import get_decimal_places
 
 
 def remove_zero_rows(input_file, output_file):
@@ -53,9 +54,13 @@ def remove_zero_rows(input_file, output_file):
     rows_after = len(df_clean)
     rows_removed = rows_before - rows_after
 
+    # Get decimal places from config
+    decimal_places = get_decimal_places(OUTPUT_DIR)
+
     # Save to output file
     print(f"[INFO] Saving cleaned file...")
-    df_clean.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
+    float_format = f'%.{decimal_places}f'
+    df_clean.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False, float_format=float_format)
 
     print(f"\n[OK] Clean aligned file created: {output_file}")
     print(f"[OK] Rows before: {rows_before}")

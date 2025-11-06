@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import OUTPUT_DIR
 from utils.csv_helper import read_csv_auto, validate_dataframe
+from utils import get_decimal_places
 
 
 def subtract_bff(input_file, output_file):
@@ -81,8 +82,12 @@ def subtract_bff(input_file, output_file):
     # Uncomment the line below if you want to remove BFF column
     # df = df.drop(columns=['BFF'])
 
+    # Get decimal places from config
+    decimal_places = get_decimal_places(OUTPUT_DIR)
+
     print(f"\n[INFO] Saving file with BFF subtracted...")
-    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
+    float_format = f'%.{decimal_places}f'
+    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False, float_format=float_format)
 
     print(f"\n[OK] BFF subtraction completed: {output_file}")
     print(f"[OK] Total rows: {len(df)}")

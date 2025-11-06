@@ -60,7 +60,9 @@ def round_mass_columns(input_file, output_file, decimal_places):
 
     # Save to output file
     print(f"\n[INFO] Saving processed file...")
-    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
+    # Use float_format to preserve the exact number of decimal places
+    float_format = f'%.{decimal_places}f'
+    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False, float_format=float_format)
 
     print(f"\n[OK] Processed file saved at: {output_file}")
     print(f"[OK] Total columns processed: {columns_processed}")
@@ -120,6 +122,12 @@ if __name__ == "__main__":
     print("="*70 + "\n")
 
     try:
+        # Save decimal places configuration for subsequent scripts
+        config_file = os.path.join(OUTPUT_DIR, ".decimal_config")
+        with open(config_file, 'w') as f:
+            f.write(str(decimal_places))
+        print(f"[INFO] Saved decimal places configuration: {decimal_places}")
+
         # Save to OUTPUT for history
         round_mass_columns(INPUT_FILE, output_file, decimal_places)
 

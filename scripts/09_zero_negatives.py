@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import OUTPUT_DIR
 from utils.csv_helper import read_csv_auto, validate_dataframe
+from utils import get_decimal_places
 
 
 def zero_negatives(input_file, output_file):
@@ -75,9 +76,13 @@ def zero_negatives(input_file, output_file):
         if len(columns_to_process) > 50 and (columns_to_process.index(col) + 1) % 50 == 0:
             print(f"[INFO] Processed {columns_to_process.index(col) + 1}/{len(columns_to_process)} columns...")
 
+    # Get decimal places from config
+    decimal_places = get_decimal_places(OUTPUT_DIR)
+
     # Save to output file
     print(f"\n[INFO] Saving final file...")
-    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
+    float_format = f'%.{decimal_places}f'
+    df.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False, float_format=float_format)
 
     print(f"\n[OK] Final file created: {output_file}")
     print(f"[OK] Total rows: {len(df)}")

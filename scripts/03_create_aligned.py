@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import INPUT_FILE, OUTPUT_DIR, ENCODING
 from utils.csv_helper import read_csv_auto, validate_dataframe
+from utils import get_decimal_places
 
 
 def create_aligned_masses(input_file, output_file):
@@ -69,6 +70,10 @@ def create_aligned_masses(input_file, output_file):
     print(f"[INFO] Sorting mass values...")
     sorted_masses = sorted(all_masses)
 
+    # Get decimal places from config (saved in script 02)
+    decimal_places = get_decimal_places(OUTPUT_DIR)
+    print(f"[INFO] Using {decimal_places} decimal places (from config)")
+
     # Create DataFrame with Aligned column + empty columns for each sample
     print(f"[INFO] Creating aligned DataFrame with sample headers...")
 
@@ -84,7 +89,9 @@ def create_aligned_masses(input_file, output_file):
 
     # Save to output file
     print(f"[INFO] Saving aligned masses to file...")
-    df_aligned.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False)
+    # Use float_format to preserve the exact number of decimal places
+    float_format = f'%.{decimal_places}f'
+    df_aligned.to_csv(output_file, sep=delimiter, encoding='utf-8', index=False, float_format=float_format)
 
     print(f"\n[OK] Aligned mass file created: {output_file}")
     print(f"[OK] Total distinct masses: {len(sorted_masses)}")
